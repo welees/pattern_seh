@@ -7,6 +7,7 @@ Approximate Implementation of Windows SEH which works on MAC/Linux Platform
 # RELEASE INFO
   2024.11.16 release ver 0.9
     First release.
+      
       - Support nesting exception handler
       
       - Do not support __finally
