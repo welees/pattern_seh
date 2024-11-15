@@ -19,31 +19,48 @@ This project can work on the MAC/Linux platform. If you need to run on  other pl
 
 Users should use pattern seh in the following way:
 
-  TRY_START
-  {
-    Code that may cause exceptions
-  }
-  TRY_EXCEPT(ExceptionFilter)
-  {
-    Exception detection/repair code
-  }
-  TRY_END
+    TRY_START
+    
+    {
+      
+      Code that may cause exceptions
+      
+    }
+    
+    TRY_EXCEPT(ExceptionFilter)
+    
+    {
+    
+      Exception detection/repair code
+      
+    }
+    
+    TRY_END
 
 Since the exception capture mechanism of Linux/MAC is different from that of Windows, and supporting multiple platforms is a very labor-intensive task, this project does not pursue complete consistency with Windows SEH. If the user wants to use the same set of codes on all platforms, please define ExceptionFilter as a platform-related macro.
 
 On MAC/Linux platforms, the declaration of the ExceptionFilter function is
+
 typedef int (*ExceptionFilter_MAC_LINUX)(int iSignal,siginfo_t *pSignalInfo,void *pContext)
+
 On Windows platforms, it should be
+
 typedef int (*Filter_WINDOW)(IN UINT uCode)
+
 or
+
 typedef int (*Filter_WINDOW)(IN UINT uCode,IN PEXCEPTION_POINTERS pContext)
+
 It depends on what exception information the user needs to use.
 
 When an exception occurs, pattern SEH will traverse and call the exception filter registered through TRY_START. In the filter, the user needs to handle the exception & instruct pattern SEH how to perform the next action according to the actual situation.
 
 The exception filter should return one of followed 3 values, which are
+
 #define EXCEPTION_EXECUTE_HANDLER 1
+
 #define EXCEPTION_CONTINUE_SEARCH 0
+
 #define EXCEPTION_CONTINUE_EXECUTION -1
 
 EXCEPTION_EXECUTE_HANDLER
