@@ -47,6 +47,6 @@ typedef int (*Filter_WINDOW)(IN UINT uCode,IN PEXCEPTION_POINTERS pContext)
 
 EXCEPTION_EXECUTE_HANDLER  表示当前过滤器无法修复异常，但可以执行清除当前运行环境的工作，pattern SEH会去执行TRY_EXCEPT{}块中的代码。
 EXCEPTION_CONTINUE_SEARCH  表示当前过滤器不但无法修复异常，甚至无法执行清除当前运行环境的工作，pattern SEH会尝试遍历当前线程中所有嵌套的外层异常块，切换到它们的堆栈并运行异常过滤器。当所有的嵌套异常块都遍历完之后，它会象OS缺省处理方式那样报告异常并结束程序。
-EXCEPTION_CONTINUE_EXECUTION    -1  表示异常事件已经修复，pattern SEH可以尝试回到异常发生的位置重新运行触发异常的代码。
+EXCEPTION_CONTINUE_EXECUTION  表示异常事件已经修复，pattern SEH可以尝试回到异常发生的位置重新运行触发异常的代码。
 
 要注意的是：跟Windows SEH一样，异常块的嵌套是线程相关的，不同线程中的异常块不会互相嵌套。
