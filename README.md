@@ -2,9 +2,15 @@
 # mail to support@welees.com for any advise or question
 
 # pattern_seh
-Approximate Implementation of Windows SEH which works on MAC/Linux Platform
+Approximate Implementation of Windows SEH which works on MAC/Linux/Windows Platform
 
 # RELEASE INFO
+  2025.5.20 release ver 0.99
+    - Support MingW32
+    - Support MACOS
+    - Fixed the problem that raising an exception in the exception handling block would generate an exception repeatedly in a loop.
+    - Using thread-independent exception handler linking table
+
   2024.11.16 release ver 0.9
     First release.
       
@@ -15,7 +21,7 @@ Approximate Implementation of Windows SEH which works on MAC/Linux Platform
 
 # Project Description
 This project is an imitation of the SEH mechanism of Windows on the MAC/Linux platform, in order to capture and repair exceptions in the simplest way possible, and to allow cross-platform code to use the same code and exception handling logic as much as possible.
-This project can work on the MAC/Linux platform. If you need to run on  other platforms, please refer to the differences in MAC/Linux implementations and make corresponding modifications.
+This project can work on the MAC/Linux/Windows platform. If you need to run on  other platforms, please refer to the differences in MAC/Linux implementations and make corresponding modifications.
 
 Users should use pattern seh in the following way:
 
@@ -45,13 +51,7 @@ typedef int (*ExceptionFilter_MAC_LINUX)(int iSignal,siginfo_t *pSignalInfo,void
 
 On Windows platforms, it should be
 
-typedef int (*Filter_WINDOW)(IN UINT uCode)
-
-or
-
-typedef int (*Filter_WINDOW)(IN UINT uCode,IN PEXCEPTION_POINTERS pContext)
-
-It depends on what exception information the user needs to use.
+typedef int (*Filter_WINDOW)(IN PEXCEPTION_POINTERS pExceptionPointer)
 
 When an exception occurs, pattern SEH will traverse and call the exception filter registered through TRY_START. In the filter, the user needs to handle the exception & instruct pattern SEH how to perform the next action according to the actual situation.
 
@@ -73,3 +73,7 @@ EXCEPTION_CONTINUE_EXECUTION
     indicates that the exception has been fixed, and pattern SEH can try to return to the location where the exception occurred and re-run the code which triggered the exception.
 
 NOTE: like Windows SEH, the nesting of exception blocks is thread-related, and exception blocks in different threads will not be nested with each other.
+
+If the user needs to exit the loop from an exception section, use TRY_BREAK instead of the break instruction to ensure that the exception handling chain is properly maintained.
+
+Users should not use the return/goto instruction to leave an exception section from within an exception block, as this will cause a crash!
