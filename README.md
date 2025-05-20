@@ -6,12 +6,14 @@ Approximate Implementation of Windows SEH which works on MAC/Linux/Windows Platf
 
 # RELEASE INFO
   2025.5.20 release ver 0.99
-    - Support MingW32
-    - Support MACOS
-    - Fixed the problem that raising an exception in the exception handling block would generate an exception repeatedly in a loop.
-    - Using thread-independent exception handler linking table
+  
+      - Support MingW32
+      - Support MACOS
+      - Fixed the problem that raising an exception in the exception handling block would generate an exception repeatedly in a loop.
+      - Using thread-independent exception handler linking table
 
   2024.11.16 release ver 0.9
+  
     First release.
       
       - Support nesting exception handler
