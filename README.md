@@ -5,6 +5,12 @@
 Approximate Implementation of Windows SEH which works on MAC/Linux/Windows Platform
 
 # RELEASE INFO
+  2025.6.20 release ver 1.0
+  
+      - Support MingW64
+      - Optimize Non-Windows platform code
+      - Fix nest exception section maintaining bug
+      
   2025.5.20 release ver 0.99
   
       - Support MingW32

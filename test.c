@@ -137,7 +137,7 @@ int ThreadExceptionFilter
 
 void* ThreadProc(IN void *pParameter)
 {
-	printf("  Step 4.2, Work thread %llXH\n",pthread_self());
+	printf("  Step 4.2, Work thread %llXH\n",GetCurrentThreadID());
 	g_iThreadRun=1;
 	TRY_START
 	{
@@ -261,7 +261,11 @@ int ExceptionFilterFixed
 	printf("  Enter exception filter %s %p\n",__FUNCTION__,ExceptionFilterFixed);
 	printf("    Modify pointer to some data and retry(as debugger)\n\n");
 #ifdef _MINGW
+#if !defined(_WIN64)
 	pContext->ContextRecord->Eax=(unsigned int)&g_uData;
+#else //!defined(_WIN64)
+	pContext->ContextRecord->Rax=(UINT64)&g_uData;
+#endif //!defined(_WIN64)
 #endif //_MINGW
 	g_p=&g_uData;
 	return EXCEPTION_CONTINUE_EXECUTION;
@@ -367,7 +371,7 @@ void SEHNestedTest(void)
 				*((PUINT)0)=0;
 				printf("        Step 2.5, low level user code, you should not watch this message\n");
 			}
-			TRY_EXCEPT( ExceptionFilterBreakCleanUp)
+			TRY_EXCEPT(ExceptionFilterBreakCleanUp)
 			{
 				printf("          Step 2.6, low level exception clean up routine is working\n");
 				printf("            Let's occur new exception in exception clean up routine >_<.\n");
@@ -409,7 +413,7 @@ void SEHBreakTest(void)
 	TRY_START
 	{
 		printf("  Step 3.1, entry outer critical section\n");
-		printf("  Step 3.2, run 20 circles\n");
+		printf("  Step 3.2, run 20 circles, please wait ...\n");
 		for(i=0;i<20;i++)
 		{
 			printf("    Step 3.3, Do circle work, round %d\n",i);

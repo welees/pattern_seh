@@ -1,6 +1,7 @@
 #if defined(_WIN32)&&defined(_MINGW)&&(!defined(_WIN64))
 #include <windows.h>
 #include <setjmp.h>
+#include <stdio.h>
 #include "SEH.h"
 
 
@@ -16,7 +17,7 @@ void StopSEHService(void)
 
 
 //MINGW32 exception handler stub
-EXCEPTION_DISPOSITION __stdcall __welees_ExceptionPreHandler(IN PEXCEPTION_RECORD pER,IN PEXCEPTION_HANDLER_NODE pNode,IN PCONTEXT pContext,IN PVOID pDC)
+EXCEPTION_DISPOSITION __stdcall __welees_ExceptionPreHandler(IN PEXCEPTION_RECORD pER,IN PEXCEPTION_NODE pNode,IN PCONTEXT pContext,IN PVOID pDC)
 {
 	int                   i;
 	EXCEPTION_POINTERS    Param;
@@ -36,7 +37,7 @@ EXCEPTION_DISPOSITION __stdcall __welees_ExceptionPreHandler(IN PEXCEPTION_RECOR
 			printf("%s %d\n",__FILE__,__LINE__);
 #ifndef _MINGW //For debug only
 			{
-				PEXCEPTION_HANDLER_NODE pNext=pNode->Next;
+				PEXCEPTION_NODE pNext=pNode->Prev;
 				__asm
 				{
 					mov eax,pNext
@@ -44,9 +45,10 @@ EXCEPTION_DISPOSITION __stdcall __welees_ExceptionPreHandler(IN PEXCEPTION_RECOR
 				}
 			}
 #else //_MINGW
-			asm volatile("mov %0, %%fs:0" : : "r" (pNode->Next));
+			asm volatile("mov %0, %%fs:0" : : "r" (pNode->Prev));
 #endif //_MINGW
-			longjmp(pNode->Final,1);
+			pNode->Prev=NULL;
+			longjmp(pNode->SectionEntry,1);
 		case EXCEPTION_CONTINUE_SEARCH:
 			printf("%s %d\n",__FILE__,__LINE__);
 			return ExceptionContinueSearch;
