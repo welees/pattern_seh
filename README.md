@@ -5,6 +5,11 @@
 Approximate Implementation of Windows SEH which works on MAC/Linux/Windows Platform
 
 # RELEASE INFO
+  2025.6.20 release ver 1.0
+    - Support MingW64
+    - Optimize Non-Windows platform code
+    - Fix nest exception section maintaining bug
+  
   2025.5.20 release ver 0.99
     - Support MingW32
     - Support MACOS
@@ -13,11 +18,10 @@ Approximate Implementation of Windows SEH which works on MAC/Linux/Windows Platf
 
   2024.11.16 release ver 0.9
     First release.
+    - Support nesting exception handler
       
-      - Support nesting exception handler
-      
-      - Do not support __finally
-      - Do not support un-handled exception handler for whole process
+    - Do not support __finally
+    - Do not support un-handled exception handler for whole process
 
 # Project Description
 This project is an imitation of the SEH mechanism of Windows on the MAC/Linux platform, in order to capture and repair exceptions in the simplest way possible, and to allow cross-platform code to use the same code and exception handling logic as much as possible.
