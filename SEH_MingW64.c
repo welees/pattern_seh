@@ -32,7 +32,7 @@ void StopSEHService(void)
 
 
 //MINGW64 exception handler stub
-LONG WINAPI DefVEHHandler(PEXCEPTION_POINTERS pInfo)
+LONG WINAPI DefVEHHandler(IN PEXCEPTION_POINTERS pInfo)
 {
 	int             iResult;
 	PEXCEPTION_NODE pNode;
